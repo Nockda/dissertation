@@ -31,8 +31,12 @@ def savecsv(action, obs) -> None:
     output_dir = "./output/"
     os.makedirs(output_dir, exist_ok=True)
 
-    action_filename = os.path.join(output_dir, f"action_{timestamp}.csv")
-    obs_filename = os.path.join(output_dir, f"obs_{timestamp}.csv")
+    action_filename = os.path.join(output_dir, timestamp, f"action.csv")
+    obs_filename = os.path.join(output_dir, timestamp, f"obs.csv")
+
+    # Create directories if they don't exist
+    os.makedirs(os.path.dirname(action_filename), exist_ok=True)
+    os.makedirs(os.path.dirname(obs_filename), exist_ok=True)
 
     # Export action to CSV with the timestamped filename
     action_df = pd.DataFrame(action)
@@ -44,13 +48,7 @@ def savecsv(action, obs) -> None:
 
     print("CSV files saved with timestamped filenames:", action_filename, obs_filename)
 
-
-    # vae = VariationalAutoencoder(latent_dims).to(device) # GPU
-    # vae = train(vae, kp_output)
-
-
-
-def enjoy():  # noqa: C901
+def enjoy(seed):  # noqa: C901
     parser = argparse.ArgumentParser()
     parser.add_argument("--env", help="environment ID", type=EnvironmentName, default="CartPole-v1")
     parser.add_argument("-f", "--folder", help="Log folder", type=str, default="rl-trained-agents")
@@ -162,7 +160,7 @@ def enjoy():  # noqa: C901
     if algo in off_policy_algos:
         args.n_envs = 1
 
-    set_random_seed(args.seed)
+    set_random_seed(seed)
 
     if args.num_threads > 0:
         if args.verbose > 1:
@@ -193,14 +191,14 @@ def enjoy():  # noqa: C901
         env_name.gym_id,
         n_envs=args.n_envs,
         stats_path=maybe_stats_path,
-        seed=args.seed,
+        seed=seed,
         log_dir=log_dir,
         should_render=not args.no_render,
         hyperparams=hyperparams,
         env_kwargs=env_kwargs,
     )
 
-    kwargs = dict(seed=args.seed)
+    kwargs = dict(seed=seed)
     if algo in off_policy_algos:
         # Dummy buffer size as we don't need memory to enjoy the trained agent
         kwargs.update(dict(buffer_size=1))
@@ -323,4 +321,3 @@ def enjoy():  # noqa: C901
 
 if __name__ == "__main__":
     enjoy()
-    
