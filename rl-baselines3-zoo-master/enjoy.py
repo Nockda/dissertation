@@ -1,8 +1,9 @@
 import time
 from rl_zoo3.enjoy import enjoy
+from tqdm import tqdm
 
 if __name__ == "__main__":
-    for i in range(1000):
-        seed = i
-        time.sleep(1)
-        enjoy(seed)
+    # for i in tqdm(range(10000)):
+        # seed = i
+        # enjoy(seed)x
+    enjoy(0)

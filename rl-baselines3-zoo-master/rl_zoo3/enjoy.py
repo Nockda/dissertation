@@ -1,5 +1,4 @@
 import argparse
-import datetime
 import importlib
 import os
 import sys
@@ -19,20 +18,15 @@ from rl_zoo3.exp_manager import ExperimentManager
 from rl_zoo3.load_from_hub import download_from_hub
 from rl_zoo3.utils import StoreDict, get_model_path
 
-def savecsv(action, obs) -> None:
-
+def savecsv(action, obs, seed) -> None:
     action = np.reshape(action, (len(action), -1))
     obs = np.reshape(obs, (len(obs), -1))
     # Export action to CSV
 
-    current_datetime = datetime.datetime.now()
-    timestamp = current_datetime.strftime("%Y%m%d_%H%M%S")
-
     output_dir = "./output/"
     os.makedirs(output_dir, exist_ok=True)
-
-    action_filename = os.path.join(output_dir, timestamp, f"action.csv")
-    obs_filename = os.path.join(output_dir, timestamp, f"obs.csv")
+    action_filename = os.path.join(output_dir, "output_"+str(seed), f"action.csv")
+    obs_filename = os.path.join(output_dir, "output_"+str(seed), f"obs.csv")
 
     # Create directories if they don't exist
     os.makedirs(os.path.dirname(action_filename), exist_ok=True)
@@ -315,7 +309,8 @@ def enjoy(seed):  # noqa: C901
     # else:
     #     print("obs_vae가 비었습니다.")
     
-    savecsv(action_vae, obs_vae)
+ 
+    savecsv(action_vae, obs_vae, seed)
     env.close()
     return action_vae, obs_vae
 
