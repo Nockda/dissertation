@@ -16,6 +16,7 @@ from stable_baselines3.common.utils import set_random_seed
 import rl_zoo3.import_envs  # noqa: F401 pytype: disable=import-error
 from rl_zoo3.exp_manager import ExperimentManager
 from rl_zoo3.utils import ALGOS, StoreDict
+from rl_zoo3.wrappers import RightSwimWrapper
 
 
 def train() -> None:
@@ -158,6 +159,7 @@ def train() -> None:
         importlib.import_module(env_module)
 
     env_id = args.env
+    # env_id = rl_zoo3.import_envs.SwimmerRewardWrapper(env_id)
     registered_envs = set(gym.envs.registry.keys())  # pytype: disable=module-attr
     # Add gym 0.26 envs
     registered_envs.update(gym26.envs.registry.keys())  # pytype: disable=module-attr

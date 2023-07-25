@@ -323,3 +323,40 @@ class MaskVelocityWrapper(gym.ObservationWrapper):
 
     def observation(self, observation: np.ndarray) -> np.ndarray:
         return observation * self.mask
+    
+class RightSwimWrapper(gym.Wrapper):
+    def __init__(self, env):
+        super().__init__(env)
+
+    def step(self, action):
+        obs, reward, done, info = self.env.step(action)
+        # swimmer의 x 좌표를 가져옵니다.
+        x_position = obs[0]
+        # 오른쪽으로 이동할 때 추가 보상을 제공합니다.
+        reward += x_position
+        return obs, reward, done, info
+    
+class ReverseSwimmerWrapper(gym.Wrapper):
+    def step(self, action):
+        _, obs, reward, done, info = self.env.step(action)
+        reward = -reward
+        return _, obs, reward, done, info
+    
+class RightSwimWrapper(gym.Wrapper):
+    def __init__(self, env):
+        super().__init__(env)
+
+    def step(self, action):
+    
+        # 원래 step 메서드 호출하여 다음 상태와 보상, 종료 여부 등을 얻습니다.
+        next_state, original_reward, done,trunc, info = self.env.step(action)
+        action_scalar = action[0]
+        # 오른쪽으로 돌면 추가 보상을 줍니다.
+        right_reward = 0.0
+        if action_scalar == 1:  # 예시로, Swimmer-v3에서 'right' 액션의 인덱스가 2일 경우
+            right_reward = 0.5 
+
+        # 새로운 보상을 계산하여 원래 보상과 더합니다.
+        reward = original_reward + right_reward
+
+        return next_state, reward, done,trunc,  info
