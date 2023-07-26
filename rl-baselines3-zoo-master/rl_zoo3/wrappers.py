@@ -336,27 +336,60 @@ class RightSwimWrapper(gym.Wrapper):
         reward += x_position
         return obs, reward, done, info
     
-class ReverseSwimmerWrapper(gym.Wrapper):
+class ReverseWrapper(gym.Wrapper):
+    def __init__(self, env):
+        super().__init__(env)
+
     def step(self, action):
-        _, obs, reward, done, info = self.env.step(action)
+        obs, reward, done, trunc, info = self.env.step(action)
         reward = -reward
-        return _, obs, reward, done, info
+        # print('reverse 가 제대로 적용되었습니다.')
+        return obs, reward, done, trunc, info
     
 class RightSwimWrapper(gym.Wrapper):
     def __init__(self, env):
         super().__init__(env)
 
     def step(self, action):
-    
         # 원래 step 메서드 호출하여 다음 상태와 보상, 종료 여부 등을 얻습니다.
-        next_state, original_reward, done,trunc, info = self.env.step(action)
-        action_scalar = action[0]
+        next_state, original_reward, done,_,  info = self.env.step(action)
+
         # 오른쪽으로 돌면 추가 보상을 줍니다.
         right_reward = 0.0
-        if action_scalar == 1:  # 예시로, Swimmer-v3에서 'right' 액션의 인덱스가 2일 경우
-            right_reward = 0.5 
+        if action[0] > 0:  # 첫 번째 action 원소가 양수일 때, 오른쪽으로 돌고 있다고 가정
+            right_reward = 1 
+        elif action[0] < 0:
+            right_reward = -5
 
         # 새로운 보상을 계산하여 원래 보상과 더합니다.
         reward = original_reward + right_reward
 
-        return next_state, reward, done,trunc,  info
+        return next_state, reward, done, _, info
+    
+
+class RewardForTurningRight(gym.ObservationWrapper):
+    def __init__(self, env):
+        super().__init__(env)
+        self.last_angle = None
+
+    def observation(self, obs):
+        if self.last_angle is not None:
+            angle_difference = obs[2] - self.last_angle  # 가정: obs[2]는 관절의 각도
+            if angle_difference > 0:  # 오른쪽으로 회전
+                self.right_reward = angle_difference  # 여기서 right_reward는 클래스 멤버 변수
+            if angle_difference < 0:
+                self.right_reward = -1.5*angle_difference
+        else:
+            self.right_reward = 0.0  # 초기값
+        self.last_angle = obs[2]
+        return obs
+
+    def step(self, action):
+        obs, reward, done, _, info = self.env.step(action)
+        obs = self.observation(obs)  # obs를 처리하여 right_reward를 갱신
+        reward += self.right_reward  # 원래의 보상에 right_reward를 더함
+        return obs, reward, done, _, info
+
+    def reset(self, **kwargs):
+        self.last_angle = None
+        return self.env.reset(**kwargs)
