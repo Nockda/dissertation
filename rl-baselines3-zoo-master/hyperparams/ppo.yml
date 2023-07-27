@@ -409,15 +409,15 @@ Swimmer-v3:
   batch_size: 256
   learning_rate: !!float 6e-4
   gae_lambda: 0.98
-  env_wrapper:
-    - rl_zoo3.wrappers.RewardForTurningRight
+  # env_wrapper:
+  #   - rl_zoo3.wrappers.ReverseWrapper
 
 # Tuned
 # 10 mujoco envs
 
 HalfCheetah-v3:
   env_wrapper:
-  - rl_zoo3.wrappers.ReverseWrapper
+  - rl_zoo3.wrappers.RewardForTurningRight
   normalize: true
   n_envs: 1
   policy: 'MlpPolicy'
@@ -429,7 +429,7 @@ HalfCheetah-v3:
   ent_coef: 0.000401762
   clip_range: 0.1
   n_epochs: 20
-  gae_lambda: 0.92
+  gae_lambda: 0.9
   max_grad_norm: 0.8
   vf_coef: 0.58096
   policy_kwargs: "dict(
