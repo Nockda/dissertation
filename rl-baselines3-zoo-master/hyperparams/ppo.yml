@@ -410,7 +410,8 @@ Swimmer-v3:
   learning_rate: !!float 6e-4
   gae_lambda: 0.98
   # env_wrapper:
-  #   - rl_zoo3.wrappers.ReverseWrapper
+  #   - rl_zoo3.wrappers.DanceSwimmerWrapper
+
 
 # Tuned
 # 10 mujoco envs

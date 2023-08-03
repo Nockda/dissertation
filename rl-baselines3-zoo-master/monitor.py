@@ -31,7 +31,7 @@ import os
 import pandas as pd
 import numpy as np
 
-output_dir = os.path.join(".", "output")  # Path to the output directory
+output_dir = os.path.join(".", "output_front")  # Path to the output directory
 subdirs = [f.path for f in os.scandir(output_dir) if f.is_dir()]
 subdirs.sort()
 

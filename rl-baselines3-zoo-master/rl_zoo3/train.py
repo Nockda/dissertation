@@ -16,7 +16,6 @@ from stable_baselines3.common.utils import set_random_seed
 import rl_zoo3.import_envs  # noqa: F401 pytype: disable=import-error
 from rl_zoo3.exp_manager import ExperimentManager
 from rl_zoo3.utils import ALGOS, StoreDict
-from rl_zoo3.wrappers import RightSwimWrapper
 
 
 def train() -> None:
