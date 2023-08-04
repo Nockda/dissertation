@@ -118,8 +118,8 @@ Swimmer-v3:
   n_top: 1
   alive_bonus_offset: 0
   # normalize: "dict(norm_obs=True, norm_reward=False)"
-  # env_wrapper:
-  #   - rl_zoo3.wrappers.ReverseWrapper
+  env_wrapper:
+    - rl_zoo3.wrappers.ReverseWrapper
 
 Hopper-v3:
   n_envs: 1

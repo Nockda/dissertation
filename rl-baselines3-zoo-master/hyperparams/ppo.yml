@@ -409,8 +409,8 @@ Swimmer-v3:
   batch_size: 256
   learning_rate: !!float 6e-4
   gae_lambda: 0.98
-  # env_wrapper:
-  #   - rl_zoo3.wrappers.DanceSwimmerWrapper
+  env_wrapper:
+    - rl_zoo3.wrappers.ReverseWrapper
 
 
 # Tuned
