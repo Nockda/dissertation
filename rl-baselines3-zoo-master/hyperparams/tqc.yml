@@ -163,7 +163,7 @@ Swimmer-v3:
   <<: *mujoco-defaults
   gamma: 0.9999
   env_wrapper:
-    - rl_zoo3.wrappers.ReverseWrapper
+    - rl_zoo3.wrappers.RightTurnSwimmerWrapper
 
 # === HER Robotics GoalEnvs ===
 FetchReach-v1:

@@ -163,4 +163,4 @@ Swimmer-v3:
   train_freq: 1
   gradient_steps: 1
   env_wrapper:
-    - rl_zoo3.wrappers.ReverseWrapper
+    - rl_zoo3.wrappers.RightTurnSwimmerWrapper
