@@ -162,5 +162,5 @@ Swimmer-v3:
   gamma: 0.9999
   train_freq: 1
   gradient_steps: 1
-  # env_wrapper:
-  #   - rl_zoo3.wrappers.ReverseWrapper
+  env_wrapper:
+    - rl_zoo3.wrappers.ReverseWrapper
