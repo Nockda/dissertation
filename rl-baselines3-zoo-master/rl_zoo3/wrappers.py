@@ -364,42 +364,42 @@ class DanceSwimmerWrapper(gym.Wrapper):
         return obs, reward, done,trunc, info
     
 
-class RightTurnSwimmerWrapper(gym.Wrapper):
-    def __init__(self, env):
-        super().__init__(env)
+# class RightTurnSwimmerWrapper(gym.Wrapper):
+#     def __init__(self, env):
+#         super().__init__(env)
 
-    def step(self, action):
-        obs, reward, done,trunc, info = self.env.step(action)
-        x_velocity = obs[3]
-        y_velocity = obs[4]
-        if x_velocity > y_velocity:
-            reward += np.sqrt(x_velocity**2 + y_velocity**2)
+#     def step(self, action):
+#         obs, reward, done,trunc, info = self.env.step(action)
+#         x_velocity = obs[3]
+#         y_velocity = obs[4]
+#         if x_velocity > y_velocity:
+#             reward += np.sqrt(x_velocity**2 + y_velocity**2)
 
-        return obs, reward, done,trunc, info
+#         return obs, reward, done,trunc, info
     
-class RightTurnSwimmerWrapper3(gym.Wrapper):
-    def __init__(self, env):
-        super().__init__(env)
+# class RightTurnSwimmerWrapper3(gym.Wrapper):
+#     def __init__(self, env):
+#         super().__init__(env)
 
-    def step(self, action):
-        obs, reward, done, a, info = self.env.step(action)
-        x_velocity = obs[3]  # velocity of the tip along the x-axis
-        y_velocity = obs[4]  # velocity of the tip along the y-axis
+#     def step(self, action):
+#         obs, reward, done, a, info = self.env.step(action)
+#         x_velocity = obs[3]  # velocity of the tip along the x-axis
+#         y_velocity = obs[4]  # velocity of the tip along the y-axis
 
-        # Calculate the angle of the velocity vector and adjust it to the range -π to π
-        velocity_angle = np.mod(np.arctan2(y_velocity, x_velocity), 2*np.pi)
+#         # Calculate the angle of the velocity vector and adjust it to the range -π to π
+#         velocity_angle = np.mod(np.arctan2(y_velocity, x_velocity), 2*np.pi)
 
-        # Desired angle for right-turn motion (in radians)
-        desired_angle = np.pi / 5  # For example, a right-turn at 45 degrees
+#         # Desired angle for right-turn motion (in radians)
+#         desired_angle = np.pi / 5  # For example, a right-turn at 45 degrees
         
-        # Calculate the angle difference between the current velocity and desired angle
-        angle_difference = desired_angle - velocity_angle
+#         # Calculate the angle difference between the current velocity and desired angle
+#         angle_difference = desired_angle - velocity_angle
 
-        # Adjust the reward based on the angle difference
-        reward += -np.sqrt(angle_difference**2) + np.sqrt(x_velocity**2 + y_velocity**2)
+#         # Adjust the reward based on the angle difference
+#         reward += -np.sqrt(angle_difference**2) + np.sqrt(x_velocity**2 + y_velocity**2)
 
 
-        return obs, reward, done, a, info 
+#         return obs, reward, done, a, info 
 
 class RightTurnSwimmerWrapper2(gym.Wrapper):
     def __init__(self, env):
