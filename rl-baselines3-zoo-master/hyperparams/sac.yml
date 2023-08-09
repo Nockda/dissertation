@@ -208,11 +208,11 @@ Humanoid-v3:
   n_timesteps: !!float 2e6
 
 Swimmer-v3:
+  env_wrapper:
+    - rl_zoo3.wrappers.ReverseWrapper
   <<: *mujoco-defaults
   gamma: 0.9999
-  env_wrapper:
-    - rl_zoo3.wrappers.RightTurnSwimmerWrapper
-
+  
 # === HER Robotics GoalEnvs ===
 
 FetchReach-v1:

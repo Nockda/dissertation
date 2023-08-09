@@ -353,11 +353,12 @@ class DanceSwimmerWrapper(gym.Wrapper):
     def step(self, action):
         obs, reward, done,trunc, info = self.env.step(action)
         # Swimmer의 x축과 y축 방향의 속도를 가져옵니다.
+        x_angle = obs[1]
+        y_angle = obs[2]
         x_velocity = obs[6]
         y_velocity = obs[7]
-        # Swimmer가 오른쪽으로 우회전하면 보상을 증가시킵니다.
-        # 우회전은 x축 방향의 속도가 양수이고 y축 방향의 속도가 음수일 때 발생합니다.
-        if x_velocity > 0 and y_velocity > 0:
+
+        if x_angle > 0 and y_angle > 0:
             reward += np.sqrt(x_velocity**2 + y_velocity**2)
 
         return obs, reward, done,trunc, info

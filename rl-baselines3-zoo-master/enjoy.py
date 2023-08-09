@@ -6,4 +6,4 @@ if __name__ == "__main__":
     # for i in tqdm(range(10000)):
     #     seed = i
     #     enjoy(seed)
-    enjoy(0)
+    enjoy(1110)
