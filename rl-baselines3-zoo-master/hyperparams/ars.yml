@@ -109,8 +109,8 @@ ReacherBulletEnv-v0:
 # === Mujoco Envs ===
 # Params closest to original paper
 Swimmer-v3:
-  # env_wrapper:
-  #   - rl_zoo3.wrappers.ReverseWrapper
+  env_wrapper:
+    - rl_zoo3.wrappers.AngleLimitWrapper
   n_envs: 1
   policy: 'LinearPolicy'
   n_timesteps: !!float 2e6

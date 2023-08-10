@@ -364,18 +364,18 @@ class DanceSwimmerWrapper(gym.Wrapper):
         return obs, reward, done,trunc, info
     
 
-# class RightTurnSwimmerWrapper(gym.Wrapper):
-#     def __init__(self, env):
-#         super().__init__(env)
+class RightTurnSwimmerWrapper(gym.Wrapper):
+    def __init__(self, env):
+        super().__init__(env)
 
-#     def step(self, action):
-#         obs, reward, done,trunc, info = self.env.step(action)
-#         x_velocity = obs[3]
-#         y_velocity = obs[4]
-#         if x_velocity > y_velocity:
-#             reward += np.sqrt(x_velocity**2 + y_velocity**2)
+    def step(self, action):
+        obs, reward, done,trunc, info = self.env.step(action)
+        x_velocity = obs[3]
+        y_velocity = obs[4]
+        if x_velocity > y_velocity:
+            reward += np.sqrt(x_velocity**2 + y_velocity**2)
 
-#         return obs, reward, done,trunc, info
+        return obs, reward, done,trunc, info
     
 # class RightTurnSwimmerWrapper3(gym.Wrapper):
 #     def __init__(self, env):
@@ -435,3 +435,60 @@ class LeftTurnSwimmerWrapper(gym.Wrapper):
         reward += y_velocity
 
         return obs, reward, done,trunc, info
+    
+
+class SlowSwimmerWrapper(gym.Wrapper):
+    def __init__(self, env, factor=0.3):
+        super(SlowSwimmerWrapper, self).__init__(env)
+        self.factor = factor  # Factor to slow down the actions
+
+    def step(self, action):
+        slow_action = action * self.factor
+
+        return self.env.step(slow_action)
+    
+
+    import gym
+import numpy as np
+
+class AngleLimitWrapper(gym.Wrapper):
+    def __init__(self, env):
+        super(AngleLimitWrapper, self).__init__(env)
+
+    def step(self, action):
+        observation, reward, done, truc, info = self.env.step(action)
+
+        # Check if the angle of the specified joint is out of bounds
+        joint_angle1 = observation[1]  # Angle of the first rotor
+        joint_angle2 = observation[2]
+        min_angle = -0.3
+        max_angle = 0.3
+        reward_penalty = -1
+        if joint_angle1 < min_angle and joint_angle1 > max_angle:
+            reward += reward_penalty
+        if joint_angle2 < min_angle and joint_angle2 > max_angle:
+            reward += reward_penalty
+        return observation, reward, done,truc, info
+    
+
+class SecondRotorWrapper(gym.Wrapper):
+    def __init__(self, env):
+        super(SecondRotorWrapper, self).__init__(env)
+
+    def step(self, action):
+        # Set the action for the second rotor
+        new_action = [0.0, action[1]]
+        observation, reward, done,truc, info = self.env.step(new_action)
+        
+        return observation, reward, done, truc,info
+
+class SameRotorActionWrapper(gym.Wrapper):
+    def __init__(self, env):
+        super(SameRotorActionWrapper, self).__init__(env)
+
+    def step(self, action):
+        # Set the action for both rotors to be the same
+        new_action = [action[0], action[0]]
+        observation, reward, done,truc, info = self.env.step(new_action)
+        
+        return observation, reward, done,truc, info

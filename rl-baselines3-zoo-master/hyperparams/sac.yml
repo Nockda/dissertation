@@ -209,7 +209,7 @@ Humanoid-v3:
 
 Swimmer-v3:
   env_wrapper:
-    - rl_zoo3.wrappers.ReverseWrapper
+    - rl_zoo3.wrappers.AngleLimitWrapper
   <<: *mujoco-defaults
   gamma: 0.9999
   
