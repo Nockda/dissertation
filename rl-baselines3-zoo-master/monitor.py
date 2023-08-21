@@ -22,16 +22,11 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils
 import torch.distributions
-device = torch.device('mps:0' if torch.backends.mps.is_available() else 'cpu')
-
-# Check if GPU is available
-print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
-
 import os
 import pandas as pd
 import numpy as np
 
-output_dir = os.path.join(".", "output_front")  # Path to the output directory
+output_dir = os.path.join(".", "output_right_ppo")  # Path to the output directory
 subdirs = [f.path for f in os.scandir(output_dir) if f.is_dir()]
 subdirs.sort()
 
@@ -74,7 +69,7 @@ import gym
 action_sp = combined_data.iloc[:, :2]
 obs_sp = combined_data.iloc[:, 2:]
 
-env = gym.make('Swimmer-v3', render_mode = 'human')
+env = gym.make('Swimmer-v4', render_mode = 'human')
 
 # Iterate through the rows
 for i in range(len(action_sp)):

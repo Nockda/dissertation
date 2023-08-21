@@ -110,7 +110,7 @@ ReacherBulletEnv-v0:
 # Params closest to original paper
 Swimmer-v3:
   env_wrapper:
-    - rl_zoo3.wrappers.SameRotorActionWrapper
+    - rl_zoo3.wrappers.LeftTurnSwimWrapper
   n_envs: 1
   policy: 'LinearPolicy'
   n_timesteps: !!float 2e6

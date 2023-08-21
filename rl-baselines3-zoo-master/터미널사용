@@ -2,3 +2,5 @@ python enjoy.py --algo tqc --env Swimmer-v3 --folder logs/ --no-render
 python enjoy.py --algo tqc --env Swimmer-v3 --folder logs/            
 python train.py --algo tqc --env Swimmer-v3 -tb tensorboard_log       
 tensorboard --logdir=./tensorboard_log/댄스/. --reload_multifile=true
+
+

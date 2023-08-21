@@ -324,17 +324,15 @@ class MaskVelocityWrapper(gym.ObservationWrapper):
     def observation(self, observation: np.ndarray) -> np.ndarray:
         return observation * self.mask
     
-# class RightSwimWrapper(gym.Wrapper):
-#     def __init__(self, env):
-#         super().__init__(env)
+class LeftTurnSwimWrapper(gym.Wrapper):
+    def __init__(self, env):
+        super().__init__(env)
 
-#     def step(self, action):
-#         obs, reward, done, info = self.env.step(action)
-#         # swimmer의 x 좌표를 가져옵니다.
-#         x_position = obs[0]
-#         # 오른쪽으로 이동할 때 추가 보상을 제공합니다.
-#         reward += x_position
-#         return obs, reward, done, info
+    def step(self, action):
+        obs, reward, done,truc,  info = self.env.step(action)
+        x_position = obs[0]
+        reward += x_position
+        return obs, reward, done,truc, info
     
 class ReverseWrapper(gym.Wrapper):
     def __init__(self, env):
@@ -346,23 +344,6 @@ class ReverseWrapper(gym.Wrapper):
         # print('reverse 가 제대로 적용되었습니다.')
         return obs, reward, done, trunc, info
     
-class DanceSwimmerWrapper(gym.Wrapper):
-    def __init__(self, env):
-        super().__init__(env)
-
-    def step(self, action):
-        obs, reward, done,trunc, info = self.env.step(action)
-        # Swimmer의 x축과 y축 방향의 속도를 가져옵니다.
-        x_angle = obs[1]
-        y_angle = obs[2]
-        x_velocity = obs[6]
-        y_velocity = obs[7]
-
-        if x_angle > 0 and y_angle > 0:
-            reward += np.sqrt(x_velocity**2 + y_velocity**2)
-
-        return obs, reward, done,trunc, info
-    
 
 class RightTurnSwimmerWrapper(gym.Wrapper):
     def __init__(self, env):
@@ -370,49 +351,7 @@ class RightTurnSwimmerWrapper(gym.Wrapper):
 
     def step(self, action):
         obs, reward, done,trunc, info = self.env.step(action)
-        x_velocity = obs[3]
         y_velocity = obs[4]
-        if x_velocity > y_velocity:
-            reward += np.sqrt(x_velocity**2 + y_velocity**2)
-
-        return obs, reward, done,trunc, info
-    
-# class RightTurnSwimmerWrapper3(gym.Wrapper):
-#     def __init__(self, env):
-#         super().__init__(env)
-
-#     def step(self, action):
-#         obs, reward, done, a, info = self.env.step(action)
-#         x_velocity = obs[3]  # velocity of the tip along the x-axis
-#         y_velocity = obs[4]  # velocity of the tip along the y-axis
-
-#         # Calculate the angle of the velocity vector and adjust it to the range -π to π
-#         velocity_angle = np.mod(np.arctan2(y_velocity, x_velocity), 2*np.pi)
-
-#         # Desired angle for right-turn motion (in radians)
-#         desired_angle = np.pi / 5  # For example, a right-turn at 45 degrees
-        
-#         # Calculate the angle difference between the current velocity and desired angle
-#         angle_difference = desired_angle - velocity_angle
-
-#         # Adjust the reward based on the angle difference
-#         reward += -np.sqrt(angle_difference**2) + np.sqrt(x_velocity**2 + y_velocity**2)
-
-
-#         return obs, reward, done, a, info 
-
-class RightTurnSwimmerWrapper2(gym.Wrapper):
-    def __init__(self, env):
-        super().__init__(env)
-
-    def step(self, action):
-        obs, reward, done,trunc, info = self.env.step(action)
-        # Swimmer의 x축과 y축 방향의 속도를 가져옵니다.
-        x_velocity = obs[3]
-        y_velocity = obs[4]
-        # Swimmer가 오른쪽으로 우회전하면 보상을 증가시킵니다.
-        # 우회전은 x축 방향의 속도가 양수이고 y축 방향의 속도가 음수일 때 발생합니다.
-        # if y_velocity > 0:
         reward += -y_velocity
 
         return obs, reward, done,trunc, info
@@ -420,21 +359,17 @@ class RightTurnSwimmerWrapper2(gym.Wrapper):
 
 
 
-class LeftTurnSwimmerWrapper(gym.Wrapper):
-    def __init__(self, env):
-        super().__init__(env)
+# class LeftTurnSwimmerWrapper(gym.Wrapper):
+#     def __init__(self, env):
+#         super().__init__(env)
 
-    def step(self, action):
-        obs, reward, done,trunc, info = self.env.step(action)
-        # Swimmer의 x축과 y축 방향의 속도를 가져옵니다.
-        x_velocity = obs[3]
-        y_velocity = obs[4]
-        # Swimmer가 오른쪽으로 우회전하면 보상을 증가시킵니다.
-        # 우회전은 x축 방향의 속도가 양수이고 y축 방향의 속도가 음수일 때 발생합니다.
-        # if y_velocity > 0:
-        reward += y_velocity
+#     def step(self, action):
+#         obs, reward, done,trunc, info = self.env.step(action)
+#         x_velocity = obs[3]
+#         y_velocity = obs[4]
+#         reward += -y_velocity+x_velocity
 
-        return obs, reward, done,trunc, info
+#         return obs, reward, done,trunc, info
     
 
 class SlowSwimmerWrapper(gym.Wrapper):
@@ -446,10 +381,7 @@ class SlowSwimmerWrapper(gym.Wrapper):
         slow_action = action * self.factor
 
         return self.env.step(slow_action)
-    
 
-    import gym
-import numpy as np
 
 class AngleLimitWrapper(gym.Wrapper):
     def __init__(self, env):
@@ -481,14 +413,3 @@ class SecondRotorWrapper(gym.Wrapper):
         observation, reward, done,truc, info = self.env.step(new_action)
         
         return observation, reward, done, truc,info
-
-class SameRotorActionWrapper(gym.Wrapper):
-    def __init__(self, env):
-        super(SameRotorActionWrapper, self).__init__(env)
-
-    def step(self, action):
-        # Set the action for both rotors to be the same
-        new_action = [action[0], action[0]]
-        observation, reward, done,truc, info = self.env.step(new_action)
-        
-        return observation, reward, done,truc, info
