@@ -23,7 +23,7 @@ def savecsv(action, obs, seed) -> None:
     obs = np.reshape(obs, (len(obs), -1))
     # Export action to CSV
 
-    output_dir = "./output_front_ppo/"
+    output_dir = "./output_bw_ppo/"
     os.makedirs(output_dir, exist_ok=True)
     action_filename = os.path.join(output_dir, "output_"+str(seed), f"action.csv")
     obs_filename = os.path.join(output_dir, "output_"+str(seed), f"obs.csv")
